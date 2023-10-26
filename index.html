@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./Style.css">
+    <title>Weather App</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+</head>
+<body>
+    <div>
+        <h1>Weather</h1>
+    </div>
+    
+    <div class="container">
+        <div class="search ">
+<input type="text" placeholder="Enter City Name">
+<button onclick="search()" type="button" class="btn btn-danger"><img src="./gallery/404.png"  alt=""></button>
+
+</div>
+<div class="error">
+    <p>Invalid City Name</p>
+</div>
+<div class="weather">
+    <img src="./images/rain.png" class="icon" alt="">
+    <h1 class="celcius">22°c</h1>
+    <h2 class="city">Delhi</h2>
+    <div class="detail">
+        <div class="col">
+            <div class="humidity">
+                <p>Country</p>
+
+                <p class="count">.</p>
+            </div>
+
+        <div class="col">
+            <img src="./image/humidity.png" alt="">
+            <div class="humidity">
+                <p>Humidity</p>
+
+                <p class="humidityP">.</p>
+            </div>
+        
+        <div class="col">
+            <img src="./image/wind.jpeg"alt="">
+            <div class="wind">
+                <p>Speeed</p>
+
+                <p class="windS">.</p>
+            </div>
+            <div class="col">
+                <img src="./gallery/.png" alt="">
+                <div class="wind">
+                    <p>Pressure</p>
+                    <p class="pressurep">.</p>
+                    
+                </div>
+
+        </div>
+    </div>
+</div>
+    </div>
+</div>
+    <script>
+        const searchInput =document.querySelector('.search input');
+        const searchBtn =document.querySelector('.search button');
+        const image =document.querySelector('.icon');
+       async function getWeather(city){
+        var res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=16bfa98849718de13b6e8978b87d47b8&units=metric`)
+        if(res.status == 404){
+            document.querySelector('.error').style.display ="block"
+        }else{
+            document.querySelector('.error').style.display ="none"
+        }
+        var data = await res.json();
+        console.log(data);
+        document.querySelector('.celcius').innerHTML =Math.round(data.main.temp) + "°c";
+        document.querySelector('.city').innerHTML =data.name ;
+        document.querySelector('.humidityP').innerHTML =Math.round (data.main.humidity) + "%";
+        document.querySelector('.windS').innerHTML =Math.round(data.wind.speed) + "km/h";
+        document.querySelector('.pressurep').innerHTML =Math.round (data.main.pressure);
+        document.querySelector('.count').innerHTML =data.sys.country;
+
+
+        if(data.weather[0].main =="Clouds"){
+            image.src ="./images/clouds.png"
+        }
+        else if(data.weather[0].main =="Clear")
+        {
+            image.src ="./images/clear.png"
+        }
+        else if(data.weather[0].main =="Rain")
+        {
+            image.src ="./images/rain.png"
+        }
+        else if(data.weather[0].main =="Mist"){
+            image.src ="./gallery/mist.png"
+        }
+    
+        else if(data.weather[0].main =="Snow"){
+            image.src ="./gallery/snow.png"
+        }
+        
+       }
+       searchBtn.addEventListener('click',() => {
+        getWeather(searchInput.value);
+       })
+       
+    </script>
+</body>
+</html>
